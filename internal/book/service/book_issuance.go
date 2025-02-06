@@ -1,8 +1,8 @@
 package service
 
 import (
+	"lms/internal/Book/repository"
 	"lms/models"
-	"lms/repository"
 )
 
 func CreateBookIssuance(issuance *models.BookIssuance) error {

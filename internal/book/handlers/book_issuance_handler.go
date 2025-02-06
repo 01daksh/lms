@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"lms/internal/Book/service"
 	"lms/models"
-	"lms/service"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"lms/handlers"
+	"lms/internal/book/handlers"
 
 	"github.com/gofiber/fiber/v2"
 )
