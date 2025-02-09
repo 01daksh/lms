@@ -5,24 +5,39 @@ import (
 	"lms/models"
 )
 
-func CreateBookIssuance(issuance *models.BookIssuance) error {
-	result := database.DB.Create(issuance)
-	return result.Error
+// BookIssuanceRepository defines repository methods
+type BookIssuanceRepository interface {
+	CreateBookIssuance(issuance *models.BookIssuance) error
+	GetAllIssuedBooks() ([]models.BookIssuance, error)
+	GetBookIssuanceByID(id string) (models.BookIssuance, error)
+	UpdateBookIssuance(id string, updatedBook *models.BookIssuance) (models.BookIssuance, error)
+	DeleteBookIssuance(id string) error
 }
 
-func GetAllIssuedBooks() ([]models.BookIssuance, error) {
+// bookIssuanceRepo implements BookIssuanceRepository
+type bookIssuanceRepo struct{}
+
+func NewBookIssuanceRepo() BookIssuanceRepository {
+	return &bookIssuanceRepo{}
+}
+
+func (r *bookIssuanceRepo) CreateBookIssuance(issuance *models.BookIssuance) error {
+	return database.DB.Create(issuance).Error
+}
+
+func (r *bookIssuanceRepo) GetAllIssuedBooks() ([]models.BookIssuance, error) {
 	var books []models.BookIssuance
 	result := database.DB.Find(&books)
 	return books, result.Error
 }
 
-func GetBookIssuanceByID(id string) (models.BookIssuance, error) {
+func (r *bookIssuanceRepo) GetBookIssuanceByID(id string) (models.BookIssuance, error) {
 	var book models.BookIssuance
 	result := database.DB.First(&book, id)
 	return book, result.Error
 }
 
-func UpdateBookIssuance(id string, updatedBook *models.BookIssuance) (models.BookIssuance, error) {
+func (r *bookIssuanceRepo) UpdateBookIssuance(id string, updatedBook *models.BookIssuance) (models.BookIssuance, error) {
 	var book models.BookIssuance
 	result := database.DB.First(&book, id)
 	if result.Error != nil {
@@ -38,7 +53,6 @@ func UpdateBookIssuance(id string, updatedBook *models.BookIssuance) (models.Boo
 	return book, result.Error
 }
 
-func DeleteBookIssuance(id string) error {
-	result := database.DB.Delete(&models.BookIssuance{}, id)
-	return result.Error
+func (r *bookIssuanceRepo) DeleteBookIssuance(id string) error {
+	return database.DB.Delete(&models.BookIssuance{}, id).Error
 }
